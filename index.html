@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>writecodefor.me — Something is brewing</title>
+  <meta name="description" content="A new kind of developer experience is on its way. Stay tuned.">
+  <meta name="theme-color" content="#0a0a0f">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⌘</text></svg>">
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --accent: #a78bfa;
+      --accent-glow: rgba(167, 139, 250, .15);
+      --text: #e4e4ef;
+      --muted: #7a7a8e;
+      --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      --mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Subtle grid background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(167, 139, 250, .03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(167, 139, 250, .03) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Ambient glow */
+    .glow {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: .12;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .glow--primary {
+      background: var(--accent);
+      top: -15%;
+      left: 50%;
+      transform: translateX(-50%);
+      animation: drift 12s ease-in-out infinite alternate;
+    }
+    .glow--secondary {
+      background: #6366f1;
+      bottom: -20%;
+      right: -10%;
+      width: 500px;
+      height: 500px;
+      animation: drift 16s ease-in-out infinite alternate-reverse;
+    }
+
+    @keyframes drift {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(30px, -20px); }
+    }
+
+    /* Main content */
+    .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 2rem;
+      max-width: 680px;
+    }
+
+    /* Logo / Brand */
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      margin-bottom: 3rem;
+      font-family: var(--mono);
+      font-size: .85rem;
+      letter-spacing: .08em;
+      color: var(--muted);
+      text-transform: lowercase;
+      border: 1px solid rgba(167, 139, 250, .15);
+      padding: .55rem 1.2rem;
+      border-radius: 999px;
+      background: rgba(167, 139, 250, .04);
+      backdrop-filter: blur(12px);
+    }
+    .brand .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      animation: pulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: .4; transform: scale(.8); }
+    }
+
+    /* Headline */
+    .headline {
+      font-size: clamp(2.2rem, 6vw, 3.6rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -.02em;
+      margin-bottom: 1.5rem;
+    }
+    .headline .highlight {
+      background: linear-gradient(135deg, var(--accent), #818cf8, #c084fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    /* Subtext */
+    .subtext {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      max-width: 520px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Terminal-style teaser */
+    .terminal {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,.06);
+      border-radius: 12px;
+      padding: 1.5rem 1.8rem;
+      text-align: left;
+      font-family: var(--mono);
+      font-size: .85rem;
+      line-height: 1.8;
+      margin-bottom: 3rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 30px rgba(0,0,0,.3);
+    }
+    .terminal::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: .4;
+    }
+    .terminal-dots {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 1rem;
+    }
+    .terminal-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.08);
+    }
+    .terminal-line { color: var(--muted); white-space: pre; }
+    .terminal-line .cmd { color: var(--accent); }
+    .terminal-line .str { color: #6ee7b7; }
+    .terminal-line .comment { color: #4a4a5a; font-style: italic; }
+    .cursor {
+      display: inline-block;
+      width: 8px;
+      height: 15px;
+      background: var(--accent);
+      vertical-align: text-bottom;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Status badge */
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .8rem;
+      color: var(--muted);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #6ee7b7;
+      box-shadow: 0 0 8px rgba(110, 231, 183, .5);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    /* Footer */
+    .footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1;
+      text-align: center;
+      padding: 1.5rem;
+      font-size: .75rem;
+      color: rgba(122,122,142,.5);
+      letter-spacing: .04em;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .terminal { padding: 1.2rem; font-size: .78rem; }
+      .container { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="glow glow--primary"></div>
+  <div class="glow glow--secondary"></div>
+
+  <main class="container">
+    <div class="brand">
+      <span class="dot"></span>
+      writecodefor.me
+    </div>
+
+    <h1 class="headline">
+      Something <span class="highlight">extraordinary</span><br>
+      is being crafted.
+    </h1>
+
+    <p class="subtext">
+      We're building a new kind of space for developers who care about the craft.
+      Code with intention. Ship with confidence. Human-first, AI-augmented.
+    </p>
+
+    <div class="terminal">
+      <div class="terminal-dots">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="terminal-line"><span class="comment">// what's cooking?</span></div>
+      <div class="terminal-line"><span class="cmd">const</span> mission = <span class="str">"empower developers"</span>;</div>
+      <div class="terminal-line"><span class="cmd">const</span> status  = <span class="str">"brewing something rare"</span>;</div>
+      <div class="terminal-line"><span class="cmd">const</span> eta     = <span class="str">"soon™"</span>;</div>
+      <div class="terminal-line"> </div>
+      <div class="terminal-line"><span class="cmd">await</span> launch();<span class="cursor"></span></div>
+    </div>
+
+    <div class="status">
+      <span class="status-dot"></span>
+      Building in progress
+    </div>
+  </main>
+
+  <footer class="footer">
+    &copy; 2025 writecodefor.me &mdash; All rights reserved.
+  </footer>
+</body>
+</html>
